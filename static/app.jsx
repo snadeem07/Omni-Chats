@@ -792,7 +792,7 @@ const SettingsPage = ({ settings, setSettings }) => {
         <p>Configure the three assistants, manage keys, and tune how rounds run.</p>
       </div>
 
-      <Section title="API Keys" sub="Stored in your browser. Sent only to this local server, never to third parties.">
+      <Section title="API Keys" sub="Set in .env on the server (recommended) or paste here to override for this session.">
         <div className="keys-grid">
           {Object.keys(AI_META).map(id =>
             <div key={id} className="key-row">
@@ -801,7 +801,7 @@ const SettingsPage = ({ settings, setSettings }) => {
                 <input type={reveal[id] ? 'text' : 'password'} className="key-input"
                        value={settings.keys[id]}
                        onChange={e => setSettings(s => ({ ...s, keys: { ...s.keys, [id]: e.target.value } }))}
-                       placeholder={`${id === 'claude' ? 'sk-ant-' : id === 'gemini' ? 'AIza' : 'sk-'}…`} />
+                       placeholder={settings.keysConfigured?.[id] ? '✓ Set in .env — paste here to override' : `${id === 'claude' ? 'sk-ant-' : id === 'gemini' ? 'AIza' : 'sk-'}…`} />
                 <button className="reveal-btn" onClick={() => setReveal(r => ({ ...r, [id]: !r[id] }))}>
                   <Icon name={reveal[id] ? 'eyeOff' : 'eye'} size={15} />
                 </button>
@@ -809,7 +809,7 @@ const SettingsPage = ({ settings, setSettings }) => {
               <button className={`test-btn ${testing[id] || ''}`} onClick={() => testKey(id)}>
                 {testing[id] === 'testing' && <><span className="spinner" /> Testing…</>}
                 {testing[id] === 'ok'      && <><Icon name="check" size={13} /> Connected</>}
-                {!testing[id]              && 'Test connection'}
+                {!testing[id]              && (settings.keysConfigured?.[id] ? '✓ Set in .env' : 'Not configured')}
               </button>
             </div>
           )}
@@ -960,13 +960,29 @@ const App = () => {
   const [activePreset, setActivePreset] = useState('all');
   const [collapsed, setCollapsed] = useState(false);
   const [settings, setSettings] = useState({
-    models: { claude: "claude-opus-4-5", gemini: "gemini-2.0-flash", qwen: "qwen-max" },
+    models: { claude: "claude-opus-4-5", gemini: "gemini-2.0-flash", qwen: "qwen-plus" },
     keys:   { claude: "", gemini: "", qwen: "" },
+    keysConfigured: { claude: false, gemini: false, qwen: false },
     maxRounds: 2,
     autoContinue: true,
     theme: tweaks.theme,
     fontSize: "M",
   });
+
+  // Load server-side defaults from .env on startup
+  useEffect(() => {
+    fetch('/api/config')
+      .then(r => r.json())
+      .then(cfg => {
+        setSettings(s => ({
+          ...s,
+          models: cfg.models,
+          maxRounds: cfg.maxRounds,
+          keysConfigured: cfg.keysConfigured,
+        }));
+      })
+      .catch(() => {}); // silently ignore if server not ready
+  }, []);
 
   // Sync theme tweaks ↔ settings
   useEffect(() => { setSettings(s => ({ ...s, theme: tweaks.theme })); }, [tweaks.theme]);
