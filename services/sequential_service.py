@@ -5,6 +5,7 @@ from services.parallel_service import (
     AI_FULLNAME,
     AI_COMPANY,
     _stream_one,
+    _resolve_keys,
 )
 
 FIRST_SYSTEM = (
@@ -21,7 +22,7 @@ LATER_SYSTEM = (
 
 
 async def run_sequential_stream(req: SequentialStreamRequest, queue: asyncio.Queue) -> None:
-    keys = req.keys.model_dump()
+    keys = _resolve_keys(req.keys.model_dump())
     models = req.models.model_dump()
     sys_prompts = req.system_prompts.model_dump()
 

@@ -4,6 +4,16 @@ from ai.claude import ClaudeProvider
 from ai.gemini import GeminiProvider
 from ai.qwen import QwenProvider
 from models.schemas import ParallelStreamRequest
+from config import settings
+
+
+def _resolve_keys(client_keys: dict) -> dict:
+    """Fall back to .env values when the browser hasn't supplied a key."""
+    return {
+        "claude": client_keys.get("claude", "").strip() or settings.anthropic_api_key,
+        "gemini": client_keys.get("gemini", "").strip() or settings.google_api_key,
+        "qwen":   client_keys.get("qwen",   "").strip() or settings.dashscope_api_key,
+    }
 
 AI_FULLNAME = {"claude": "Claude", "gemini": "Gemini", "qwen": "Qwen"}
 AI_COMPANY = {"claude": "Anthropic", "gemini": "Google", "qwen": "Alibaba"}
@@ -31,7 +41,7 @@ def get_provider(ai_id: str, key: str, model: str) -> AIProvider:
 
 
 async def run_parallel_stream(req: ParallelStreamRequest, queue: asyncio.Queue) -> None:
-    keys = req.keys.model_dump()
+    keys = _resolve_keys(req.keys.model_dump())
     models = req.models.model_dump()
     sys_prompts = req.system_prompts.model_dump()
 
