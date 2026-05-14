@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     dashscope_api_key: str = ""
 
     # Model versions — change in .env to change everywhere
-    claude_model: str = "claude-opus-4-5"
+    claude_model: str = "claude-haiku-4-5"
     gemini_model: str = "gemini-2.0-flash"
     qwen_model: str = "qwen3-32b"
 
