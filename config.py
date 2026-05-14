@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     # Model versions — change in .env to change everywhere
     claude_model: str = "claude-opus-4-5"
     gemini_model: str = "gemini-2.0-flash"
-    qwen_model: str = "qwen-plus"
+    qwen_model: str = "qwen3-32b"
 
     # Conversation defaults
     max_rounds: int = 2
