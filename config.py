@@ -14,7 +14,7 @@ class Settings(BaseSettings):
 
     # Model versions — change in .env to change everywhere
     claude_model: str = "claude-haiku-4-5"
-    gemini_model: str = "gemini-2.0-flash"
+    gemini_model: str = "gemini-2.5-flash-preview-05-20"
     qwen_model: str = "qwen3-32b"
 
     # Conversation defaults
