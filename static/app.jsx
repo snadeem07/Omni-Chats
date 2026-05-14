@@ -772,8 +772,17 @@ const InputBar = ({ onSend, activeCount }) => {
 // ─────────────────────────────────────────────────────────────────────────────
 const MODELS = {
   claude: ["claude-opus-4-5", "claude-sonnet-4-5", "claude-haiku-4-5"],
-  gemini: ["gemini-2.0-flash", "gemini-1.5-pro"],
-  qwen:   ["qwen-plus", "qwen-turbo", "qwen-max"],
+  gemini: ["gemini-2.0-flash", "gemini-2.0-flash-lite", "gemini-1.5-pro"],
+  qwen:   [
+    "qwen3-235b-a22b",
+    "qwen3-235b-a22b-instruct-2507",
+    "qwen3-32b",
+    "qwen3-14b",
+    "qwen3-8b",
+    "qwen3-0.6b",
+    "qwen3-30b-a3b",
+    "qwen3-30b-a3b-instruct-2507",
+  ],
 };
 
 const SettingsPage = ({ settings, setSettings }) => {
@@ -960,7 +969,7 @@ const App = () => {
   const [activePreset, setActivePreset] = useState('all');
   const [collapsed, setCollapsed] = useState(false);
   const [settings, setSettings] = useState({
-    models: { claude: "claude-opus-4-5", gemini: "gemini-2.0-flash", qwen: "qwen-plus" },
+    models: { claude: "claude-opus-4-5", gemini: "gemini-2.0-flash", qwen: "qwen3-32b" },
     keys:   { claude: "", gemini: "", qwen: "" },
     keysConfigured: { claude: false, gemini: false, qwen: false },
     maxRounds: 2,
