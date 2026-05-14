@@ -26,6 +26,7 @@ if exist "%DEST%" (
     echo   %DEST%
     echo.
     echo Run start.bat inside that folder instead.
+    echo Or open the folder in VS Code: code "%DEST%"
     pause
     exit /b
 )
@@ -52,16 +53,22 @@ if not exist "%DEST%\.env" (
 
 echo.
 echo ================================================
-echo   Setup complete!
-echo   Folder: %DEST%
+echo   Setup complete!  Folder: %DEST%
 echo.
-echo   NEXT STEP: Open the .env file in that folder
-echo   and paste in your API keys, then run start.bat
+echo   NEXT STEP: Add your API keys to .env
+echo   then press F5 in VS Code  (or run start.bat)
 echo ================================================
 echo.
 
-:: Open the folder and .env for editing
-explorer "%DEST%"
-notepad "%DEST%\.env"
+:: Open in VS Code if installed, otherwise open folder + notepad
+where code >nul 2>&1
+if errorlevel 1 (
+    explorer "%DEST%"
+    notepad "%DEST%\.env"
+) else (
+    echo Opening in VS Code...
+    code "%DEST%"
+    notepad "%DEST%\.env"
+)
 
 pause
