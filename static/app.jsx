@@ -771,9 +771,16 @@ const InputBar = ({ onSend, activeCount }) => {
 // SETTINGS PAGE
 // ─────────────────────────────────────────────────────────────────────────────
 const MODELS = {
-  claude: ["claude-opus-4-5", "claude-sonnet-4-5", "claude-haiku-4-5"],
-  gemini: ["gemini-2.0-flash", "gemini-2.0-flash-lite", "gemini-1.5-pro"],
-  qwen:   [
+  claude: ["claude-haiku-4-5", "claude-sonnet-4-5", "claude-opus-4-5"],
+  gemini: [
+    "gemini-2.5-flash-preview-05-20",
+    "gemini-2.5-pro-preview-05-06",
+    "gemini-2.0-flash-001",
+    "gemini-2.0-flash-lite-001",
+    "gemini-1.5-flash",
+    "gemini-1.5-pro",
+  ],
+  qwen: [
     "qwen3-235b-a22b",
     "qwen3-235b-a22b-instruct-2507",
     "qwen3-32b",
