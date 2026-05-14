@@ -20,13 +20,28 @@ if errorlevel 1 (
     exit /b
 )
 
-echo [1/3] Python found.
+echo [1/4] Python found.
 
-:: Install dependencies
-echo [2/3] Installing dependencies ^(first run only^)...
+:: Auto-update from GitHub if git is available
+git --version >nul 2>&1
+if errorlevel 1 (
+    echo [2/4] Git not found — skipping auto-update.
+    echo        Install Git from https://git-scm.com to enable auto-updates.
+) else (
+    echo [2/4] Checking for updates...
+    git pull --quiet
+    if errorlevel 1 (
+        echo        Could not reach GitHub — continuing with local version.
+    ) else (
+        echo        Up to date.
+    )
+)
+
+:: Install / update dependencies
+echo [3/4] Installing dependencies...
 pip install -r requirements.txt --quiet
 
-echo [3/3] Starting Omni-Chats server...
+echo [4/4] Starting Omni-Chats server...
 echo.
 echo ================================================
 echo   App is running at: http://localhost:8000
