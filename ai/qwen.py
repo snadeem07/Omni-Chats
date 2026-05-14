@@ -2,7 +2,7 @@ from typing import AsyncIterator
 from openai import AsyncOpenAI
 from .base import AIProvider
 
-DASHSCOPE_BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+DASHSCOPE_BASE_URL = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1"
 
 
 class QwenProvider(AIProvider):
