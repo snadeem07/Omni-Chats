@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPhone Photo Access Test</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: #f4f4f9; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        button { background: #007AFF; color: white; border: none; padding: 12px 20px; font-size: 16px; border-radius: 8px; width: 100%; margin-top: 10px; }
+        .stats { margin-top: 15px; font-weight: bold; }
+        #preview { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
+        #preview img { width: 80px; height: 80px; object-fit: cover; border-radius: 6px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Screenshot Web Sorter Test</h2>
+    <p>Tap below to select screenshots from your iPhone photo library.</p>
+    
+    <!-- Hidden File Input -->
+    <input type="file" id="photoInput" accept="image/*" multiple style="display: none;">
+    
+    <!-- Trigger Button -->
+    <button onclick="document.getElementById('photoInput').click()">Select Photos / Screenshots</button>
+
+    <div class="stats" id="status">No photos selected yet.</div>
+    <div id="preview"></div>
+</div>
+
+<script>
+    const photoInput = document.getElementById('photoInput');
+    const status = document.getElementById('status');
+    const preview = document.getElementById('preview');
+
+    photoInput.addEventListener('change', (event) => {
+        const files = event.target.files;
+        const count = files.length;
+
+        if (count === 0) {
+            status.innerText = "No photos selected.";
+            return;
+        }
+
+        // Calculate total file size
+        let totalBytes = 0;
+        for (let file of files) {
+            totalBytes += file.size;
+        }
+        const totalMB = (totalBytes / (1024 * 1024)).toFixed(2);
+
+        // Update the status text
+        status.innerHTML = `
+            Success!<br>
+            <strong>Photos Selected:</strong> ${count}<br>
+            <strong>Total Size:</strong> ${totalMB} MB
+        `;
+
+        // Render thumbnails (limit to first 20 so browser doesn't freeze)
+        preview.innerHTML = '';
+        const limit = Math.min(count, 20);
+        for (let i = 0; i < limit; i++) {
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(files[i]);
+            preview.appendChild(img);
+        }
+    });
+</script>
+
+</body>
+</html>
